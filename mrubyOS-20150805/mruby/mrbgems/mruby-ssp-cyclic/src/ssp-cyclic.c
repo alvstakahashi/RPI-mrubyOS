@@ -2,8 +2,8 @@
 #include "mruby/variable.h"
 #include "mruby/string.h"
 
-#include <kernel.h>
-#include "kernel_cfg.h"
+#include "kernel_impl.h"
+#include "task.h"
 
 #include <string.h>
 
@@ -83,7 +83,9 @@ mrb_ssp_cyclic_call(intptr_t exf)
 #if 0
 	mrb_funcall(mrb_global, mrb_top_self(mrb_global), "cyclic",1, id);
 #else
+	i_lock_cpu();		//May be Interruped in ruby handler are problem.
 	mrb_funcall(mrb_global, self, (const char*)name_cstr,1, id);
+	i_unlock_cpu();
 #endif
 }
 	

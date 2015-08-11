@@ -2,8 +2,8 @@
 #include "mruby/variable.h"
 #include "mruby/string.h"
 
-#include <kernel.h>
-#include "kernel_cfg.h"
+#include "kernel_impl.h"
+#include "task.h"
 
 #include <string.h>
 
@@ -56,8 +56,9 @@ mrb_ssp_thread_iact(mrb_state *mrb, mrb_value self)
 	ER retval;
 	mrb_value id   = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@task_id"));
 	mrb_int id_num = mrb_fixnum(id);
+	i_unlock_cpu();
 	retval = iact_tsk(id_num);
-
+	i_lock_cpu();
 	if (retval != E_OK)
 	{
 		return(mrb_false_value());

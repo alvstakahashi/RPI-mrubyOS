@@ -2,8 +2,8 @@
 #include "mruby/variable.h"
 #include "mruby/string.h"
 
-#include <kernel.h>
-#include "kernel_cfg.h"
+#include "kernel_impl.h"
+#include "task.h"
 
 #include <string.h>
 
@@ -86,7 +86,9 @@ mrb_ssp_alarm_call(intptr_t exf)
 #if 0
 	mrb_funcall(mrb_global, mrb_top_self(mrb_global), name_cstr,1, id);
 #else
-	mrb_funcall(mrb_global, self, name_cstr,1, id);
+	i_lock_cpu();		//May be Interruped in ruby handler are problem.
+	mrb_funcall(mrb_global, self, (const char*)name_cstr,1, id);
+	i_unlock_cpu();
 #endif
 }
 	

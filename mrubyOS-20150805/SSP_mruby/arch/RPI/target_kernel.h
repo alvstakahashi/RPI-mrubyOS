@@ -108,6 +108,10 @@ Inline bool_t sence_mode(void)		// 割り込みロック（不可）のとき真
  *  のと想定している．
  */
 
+extern void enable_IRQ(void);
+extern void disable_IRQ(void);
+
+
 #define t_unlock_cpu()	enable_IRQ()
 #define i_unlock_cpu()	enable_IRQ()
 
